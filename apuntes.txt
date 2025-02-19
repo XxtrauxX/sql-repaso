@@ -1,0 +1,194 @@
+use examen;
+
+
+create table equipo(
+		id_equipo int primary key,
+		nombre_equipo varchar(100) not null,
+		ciudad_origen varchar(100) not null,
+		año_fundacion date not null);
+		
+	
+	
+	
+create table jugador(
+		id_jugador int primary key,
+		nombre_completo varchar(100) not null,
+		numero_camiseta int check(numero_camiseta>= 1 and numero_camiseta<=99),
+		posicion varchar(20) check(posicion IN('portero','defensa','mediocampista','delantero')),
+		id_equipo int not null,
+		foreign key(id_equipo) references equipo (id_equipo));
+	
+	
+	
+	
+	
+	
+create table jugador_partido(
+			id_jugador_partido int primary key,
+			id_jugador int not null,
+			id_partido int not null,
+			foreign key(id_jugador) references jugador(id_jugador),
+			foreign key(id_partido) references partido(id_partido));
+		
+		
+		
+		
+create table partido(
+			id_partido int primary key,
+			equipo_local varchar(100) not null,
+			equipo_visitante varchar(100) not null,
+			fecha_partido date not null,
+			arbitro_principal varchar(100) not null,
+			goles_equipo_local int not null,
+			goles_equipo_visitante int not null,
+			fase varchar(20) check(fase IN('cuartos','semifinal','final'))
+			);
+		
+		
+		
+		
+
+create table arbitro(
+			id_arbitro int primary key,
+			nombre_completo varchar(100) not null,
+			años_experiencia varchar(100) not null,
+			categoria varchar(20) check(categoria IN('pricipal','asistente'))
+			);
+		
+				
+		
+		
+		
+create table arbitro_partido(
+			id_arbitro_partido int primary key,
+			id_arbitro int not null,
+			id_partido int not null,
+			foreign key(id_arbitro) references arbitro(id_arbitro),
+			foreign key(id_partido) references partido(id_partido)
+		);
+		
+		
+show tables;
+
+
+
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (1,"Manchester United","Manchester",'1899-05-25');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (2,"Liverpool","Liverpool",'1899-04-24');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (3,"Barcelona","Barcelona",'1899-03-11');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (4,"Real Madrid","Madrid",'1901-01-01');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (5,"PSG","Paris",'1974-06-17');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (6,"Arsenal","Londres",'1942-01-01');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (7,"Bayern Munich","Munich",'1889-01-01');
+INSERT INTO equipo(id_equipo,nombre_equipo,ciudad_origen,año_fundacion) values (8,"Palmeiras","rio de janeiro",'1904-02-01');
+
+
+-- jugadores
+
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(1,"Dairo moreno delgado",9,"delantero",1);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(2,"Radamel Falcao Garcia",9,"delantero",1);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(3,"Oscar Alejandro Diaz",10,"mediocampista",1);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(4,"Carlos Rueda",1,"portero",1);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(5,"wiliam shekaspeare",6,"defensa",1);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(6,"Epa colombia cana",30,"defensa",2);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(7,"Otto serge maestre",11,"delantero",2);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(8,"Hector rico toronjil",13,"mediocampista",2);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(9,"Camilo eduardo Zuñiga",12,"portero",2);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(10,"Gabriel Garcia Marquez",99,"defensa",2);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(11,"Elvia Ducto delgado",3,"defensa",3);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(12,"Maluma el priri boy",24,"delantero",3);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(13,"hector el son",13,"mediocampista",3);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(14,"Juan Manuel Santos",42,"portero",3);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(15,"George Orwell",19,"defensa",3);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(16,"Erling Haaland",3,"defensa",4);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(17,"Don Omar Gutierrez",26,"delantero",4);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(18,"Arturo Vidal Fernandez",8,"mediocampista",4);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(19,"Alvaro Uribe Velez",88,"portero",4);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(20,"Juan Gabriel Vasquez",39,"defensa",4);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(21,"Bananito Betancourt",2,"defensa",5);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(22,"Juan Pablo Angel",29,"delantero",5);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(23,"Alfonsito Paraguitas",22,"mediocampista",5);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(24,"Pedro Picapiedra Gomez",78,"portero",5);
+INSERT INTO jugador(id_jugador,nombre_completo,numero_camiseta,posicion,id_equipo) values(25,"Luka Modric Salgado",10,"defensa",5);
+
+
+-- arbitros
+
+
+INSERT INTO arbitro(id_arbitro,nombre_completo,años_experiencia,categoria) values (1,"Elvis Cocho Rico","5 años","asistente");
+INSERT INTO arbitro(id_arbitro,nombre_completo,años_experiencia,categoria) values (2,"Pepe Grillo Sarmiento","12 años","pricipal");
+INSERT INTO arbitro(id_arbitro,nombre_completo,años_experiencia,categoria) values (3,"Diego Torres","1 años","pricipal");
+
+
+-- partidos
+
+INSERT INTO partido(id_partido,equipo_local,equipo_visitante,fecha_partido,arbitro_principal,goles_equipo_local,goles_equipo_visitante,fase) values (1,"Manchester United","Barcelona",'2025-03-14',"Elvis Cocho Rico",4,2,"cuartos");
+INSERT INTO partido(id_partido,equipo_local,equipo_visitante,fecha_partido,arbitro_principal,goles_equipo_local,goles_equipo_visitante,fase) values (2,"Liverpool","Palmeiras",'2025-04-24',"Elvis Cocho Rico",2,3,"cuartos");
+INSERT INTO partido(id_partido,equipo_local,equipo_visitante,fecha_partido,arbitro_principal,goles_equipo_local,goles_equipo_visitante,fase) values (3,"Bayern Munich","Real Madrid",'2025-03-14',"Diego Torres",0,2,"cuartos");
+INSERT INTO partido(id_partido,equipo_local,equipo_visitante,fecha_partido,arbitro_principal,goles_equipo_local,goles_equipo_visitante,fase) values (4,"PSG","Arsenal",'2026-03-14',"Elvis Cocho Rico",1,1,"cuartos");
+INSERT INTO partido(id_partido,equipo_local,equipo_visitante,fecha_partido,arbitro_principal,goles_equipo_local,goles_equipo_visitante,fase) values (5,"Manchester United","Barcelona",'2025-03-14',"Elvis Cocho Rico",4,2,"cuartos");
+
+
+INSERT INTO arbitro_partido(id_arbitro_partido,id_arbitro,id_partido) values (1,1,1);
+INSERT INTO arbitro_partido(id_arbitro_partido,id_arbitro,id_partido) values (2,1,2);
+INSERT INTO arbitro_partido(id_arbitro_partido,id_arbitro,id_partido) values (3,1,4);
+INSERT INTO arbitro_partido(id_arbitro_partido,id_arbitro,id_partido) values (4,1,5);
+INSERT INTO arbitro_partido(id_arbitro_partido,id_arbitro,id_partido) values (5,3,3);
+
+
+
+
+-- consultas
+
+-- 1
+
+ select nombre_equipo, ciudad_origen from equipo
+order by nombre_equipo;
+
+
+-- 2
+select j.nombre_completo as nombre,e.nombre_equipo as equipo,j.numero_camiseta as dorsal, j.posicion from jugador j
+join equipo e on e.id_equipo = j.id_equipo
+where e.nombre_equipo = 'Barcelona';
+
+
+SELECT equipo_local,equipo_visitante,goles_equipo_local, goles_equipo_visitante,arbitro_principal
+FROM partido
+where arbitro_principal = 'Elvis Cocho Rico';
+
+
+select p.equipo_local, p.equipo_visitante, p.goles_equipo_local, p.goles_equipo_visitante, a.nombre_completo as nombre
+from partido p
+join arbitro_partido ap on ap.id_partido = p.id_partido
+join arbitro a on a.id_arbitro = ap.id_arbitro
+where ap.id_arbitro = 1;
+
+
+SELECT p.equipo_local, p.equipo_visitante, p.goles_equipo_local, p.goles_equipo_visitante
+FROM partido p
+where p.fase='cuartos';
+
+
+
+SELECT j.nombre_completo as nombre_portero, e.nombre_equipo, j.posicion
+FROM jugador j
+join equipo e on e.id_equipo = j.id_equipo
+where j.posicion = 'portero';
+		
+
+SELECT p.equipo_local
+FROM partido p
+where p.goles_equipo_local > p.goles_equipo_visitante;
+
+create view toto_viejo as
+SELECT p.equipo_local, p.equipo_visitante,
+	case
+		when p.goles_equipo_local > p.goles_equipo_visitante then p.equipo_local
+		when p.goles_equipo_local < p.goles_equipo_visitante then p.equipo_visitante
+		else "ha sido empate"
+	end as semifinalistas
+FROM partido p;
+
+
+select numero_camiseta,
+if(numero_camiseta> 20, "buen dorsal","mal dorsal") as evaluacion
+from jugador;
