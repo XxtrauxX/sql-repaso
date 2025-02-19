@@ -1,0 +1,233 @@
+-- apuntes
+
+UNION
+-----------------
+-- UNION elimina duplicados
+
+-- Obtiene todos los id de usuarios de las tablas dni y usuarios (exista o no relación)
+SELECT users.user_id AS u_user_id, dni.user_id AS d_user_id
+FROM users
+LEFT JOIN dni
+ON users.user_id = dni.user_id
+UNION
+SELECT users.user_id AS user_id, dni.user_id AS d_user_id
+FROM users
+RIGHT JOIN dni
+ON users.user_id = dni.user_id;
+
+-- Obtiene todos los datos de las tablas dni y usuarios (exista o no relación)
+SELECT *
+FROM users
+LEFT JOIN dni
+ON users.user_id = dni.user_id
+UNION
+SELECT *
+FROM users
+RIGHT JOIN dni
+ON users.user_id = dni.user_id;
+
+
+
+
+INNER JOIN
+-------------
+
+SELECT * FROM users
+INNER JOIN dni;
+
+-- Obtiene los datos de los usuarios que tienen un dni 
+SELECT * FROM users
+INNER JOIN dni
+ON users.user_id = dni.user_id;
+
+-- Obtiene los datos de los usuarios que tienen un dni (JOIN es lo mismo que INNER JOIN)
+SELECT * FROM users
+JOIN dni
+ON users.user_id = dni.user_id;
+
+-- Obtiene el nombre y el dni de los usuarios que tienen un dni y los ordena por edad
+SELECT name, dni_number FROM users
+JOIN dni
+ON users.user_id = dni.user_id
+ORDER BY age ASC;
+
+-- Obtiene los datos de los usuarios que tienen empresa
+SELECT * FROM users
+JOIN companies
+ON users.company_id = companies.company_id;
+
+-- Obtiene los datos de las empresas que tienen usuarios
+SELECT * FROM companies
+JOIN users
+ON users.company_id = companies.company_id;
+
+-- Obtiene el nombre de las empresas junto al nombre de sus usuarios
+SELECT companies.name, users.name FROM companies
+JOIN users
+ON companies.company_id = users.company_id;
+
+-- Obtiene los nombres de usuarios junto a los lenguajes que conocen
+SELECT users.name, languages.name
+FROM users_languages
+JOIN users ON users_languages.user_id=users.user_id
+JOIN languages ON users_languages.language_id=languages.language_id;
+
+-- Obtiene los nombres de usuarios junto a los lenguajes que conocen (utilizando otro orden de relación entre tablas)
+SELECT users.name, languages.name
+FROM users
+JOIN users_languages ON users.user_id=users_languages.user_id
+JOIN languages ON users_languages.language_id=languages.language_id;
+
+
+case
+----------
+
+
+
+
+SELECT *,
+CASE 
+	WHEN age > 18 THEN 'Es mayor de edad'
+    WHEN age = 18 THEN 'Acaba de cumplir la mayoría de edad'
+    ELSE 'Es menor de edad'
+END AS '¿Es mayor de edad?'
+FROM users;
+
+-- Obtiene todos los datos de la tabla "users" y establece condiciones de visualización de valores booleanos según el valor de la edad 
+SELECT *,
+CASE 
+	WHEN age > 17 THEN True
+    ELSE False
+END AS '¿Es mayor de edad?'
+FROM users;
+
+
+
+
+
+concat
+
+
+-- Concatena en una sola columa los campos nombre y apellido
+SELECT CONCAT('Nombre: ', name, ', Apellidos: ', surname) FROM users
+
+-- Concatena en una sola columa los campos nombre y apellido y le establece el alias 'Nombre completo'
+SELECT CONCAT('Nombre: ', name, ', Apellidos: ', surname) AS 'Nombre completo' FROM users
+
+
+
+
+clase lunes
+
+
+-----
+
+
+
+
+#lpad
+#rellena una cadena a la izquierda con un caracter especifico
+SELECT lpad("Campus", 10, "*");
+
+#RPAD rellena una cadena a la derecha con un caracter especifico
+SELECT RPAD("Campus",10,*);
+
+
+#count
+#--cuenta la cantidad de registros de una consulta
+
+SELECT count(C.name) from country c;
+
+#suma --- suma los valores de toda una columna
+
+select sum(c.population) as "poblacion mundial" from country c;
+
+
+#avg --calcula el promedio de los valores de toda una columna
+
+SELECT FORMAT(AVG(c.population),0) as "poblacion mundial" from country c;
+
+
+#date_format() --formatea las fechas
+
+select DATE_FORMAT("2025-02-13", "%d/%m/%Y") from country;  
+
+
+SELECT now();
+
+
+#redondea un numero funcion round()
+
+
+SELECT ifnull(c.IndepYear, "N/A") from country c;
+
+
+# if()
+
+# listar los paises de suramerica e indicar si estan despoblados o poblados
+# si la poblacion es menor a 20 millones esta despoblado, si la poblacion esta entre 20 y 40 miloones esta poblado, si la pblacion es 
+#mayor a 40 millones esta super poblado
+
+
+
+select name, format(population,0) as poblacion,
+		if(population<20000000, "despoblado",
+			if(population < 40000000, "poblado", "superpoblado")) as Estado
+from country c
+where region = "South America";
+
+
+
+# calcular la densidad de poblacion de los paises de america.
+#si la densidad de poblacion es mayor a 30h/km2 entonces mostrar que esta
+--  muy poblado, si esta entre 20 y 30 h/km2 entonces esta poblado
+-- si esta entre 10 y 20 h/km2 esta poco poblado
+-- por ultimo, los paises con densidad menor a 10/km2 esta depoblado
+-- ordenar este listado por el estado de la densidad de poblacion
+
+
+
+select name,population Round(SurfaceArea/population,2) as densidad_po,
+		if(round());
+
+
+
+
+clase martes vistas
+
+-------
+
+
+
+-- Crea unaa vista llamada "v_adult_users" con los nombres y edades de usuarios de la table "users"
+-- que tienen una edad igual o mayor a 18 años.
+CREATE VIEW v_adult_users AS
+SELECT name, age
+FROM users
+WHERE age >= 18;
+
+SELECT * FROM v_adult_users;
+
+-- Elimina la vista llamada "v_adult_users"
+DROP VIEW v_adult_users;
+
+
+
+
+indices MARTES
+
+---
+
+
+
+-- Crea un índice llamado "idx_name" en la tabla "users" asociado al campo "name"
+CREATE INDEX idx_name ON users(name);
+
+-- Crea un índice único llamado "idx_name" en la tabla "users" asociado al campo "name"
+CREATE UNIQUE INDEX idx_name ON users(name);
+
+-- Crea un índice llamado "idx_name_surname" en la tabla "users" asociado a los campos "name" y "surname"
+CREATE UNIQUE INDEX idx_name_surname ON users(name, surname);
+
+-- Elimina el índice llamado "idx_name"
+DROP INDEX idx_name ON users;
